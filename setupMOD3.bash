@@ -33,5 +33,6 @@ catkin clean -y
 catkin build 
 echo "export GAZEBO_PLUGIN_PATH=~/catkin_ws/devel/lib" >> ~/.bashrc
 source ~/.bashrc
+#haha
 
 
