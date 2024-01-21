@@ -23,9 +23,6 @@ rosdep install --from-paths src --ignore-src -r -y
 cd ~/catkin_ws/src/unified-launch
 source ~/.bashrc
 cd ~/catkin_ws/
-catkin init
-catkin clean -y
-catkin build 
 echo "export GAZEBO_PLUGIN_PATH=~/catkin_ws/devel/lib" >> ~/.bashrc
 source ~/.bashrc
 
