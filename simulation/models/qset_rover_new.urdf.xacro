@@ -104,6 +104,7 @@
             <type>transmission_interface/SimpleTransmission</type>
             <actuator name="${location}_${side}_wheel_motor">
                 <mechanicalReduction>1</mechanicalReduction>
+                <hardwareInterface>VelocityJointInterface</hardwareInterface>
             </actuator>
             <joint name="${location}_${side}_wheel_joint">
                 <hardwareInterface>VelocityJointInterface</hardwareInterface>
