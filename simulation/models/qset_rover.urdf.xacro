@@ -259,6 +259,7 @@
             <type>transmission_interface/SimpleTransmission</type>
             <actuator name="wrist_pitch_motor">
                 <mechanicalReduction>1</mechanicalReduction>
+                <hardwareInterface>EffortJointInterface</hardwareInterface>
             </actuator>
             <joint name="wrist_roll">
                 <hardwareInterface>EffortJointInterface</hardwareInterface>

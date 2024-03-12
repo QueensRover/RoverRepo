@@ -13,15 +13,20 @@ def main():
 
     gpsX = 10
     gpsY = 5
+    initialAngle = math.atan2(abs(gpsY),abs(gpsX)) *(180 / math.pi)
     dx = gpsX - rover.x
     dy = gpsY - rover.y
-    angle = math.atan2(abs(dy), abs(dx))*(180 / math.pi) #THIS IS JUST ZERO IDK WHY NEED TO FIX
+    angle = math.atan2(abs(dy),abs(dx)) *(180 / math.pi) 
 
         
 
     left_side_speed = 1
     right_side_speed = 1
     isTooClose = False
+    firstQuad = False
+    secondQuad = False
+    thirdQuad = False
+    fourthQuad = False
     try:
         while not isTooClose or True:
             print(" ANGLE: " + str(angle_reader.read_angle))
@@ -30,44 +35,87 @@ def main():
             # the below lines iterate through all the laser scan lines and prints if the distance is less than 0.5 meters
 
             if(gpsX > 0 and gpsY > 0):
-                headingDirection = angle-90
-                while rover.heading > headingDirection:
-                    left_side_speed = 1
-                    right_side_speed = -1
+                firstQuad = True
             if(gpsX > 0 and gpsY < 0):
-                while rover.heading > (-180 + angle):
-                    left_side_speed = 1
-                    right_side_speed = -1
-                    rover.send_command(left_side_speed, right_side_speed)
+                fourthQuad = True
             if(gpsX < 0 and gpsY < 0):
-                while rover.heading < (90 + angle):
-                    left_side_speed = -1
-                    right_side_speed = 1
-                    rover.send_command(left_side_speed, right_side_speed)
-            if(gpsX < 0 and gpsY < 0):
-                while rover.heading < (90 - angle):
-                    left_side_speed = -1
-                    right_side_speed = 1
-                    rover.send_command(left_side_speed, right_side_speed)
+                thirdQuad = True
+            if(gpsX < 0 and gpsY > 0):
+                secondQuad = True
+
+
+
+            if firstQuad:
+                print(initialAngle)
+                angle = math.atan2(abs(dy),abs(dx)) *(180 / math.pi) 
+                headingDirection = angle-90
+                if rover.heading > initialAngle-90:
+                    while rover.heading > headingDirection:
+                        left_side_speed = 1
+                        right_side_speed = -1
+                        rover.send_command(left_side_speed, right_side_speed)
+                else:
+                    while rover.heading < headingDirection:
+                        left_side_speed = -1
+                        right_side_speed = 1
+                        rover.send_command(left_side_speed, right_side_speed)
+
+
+            if fourthQuad:
+                angle = math.atan2(abs(dy),abs(dx)) *(180 / math.pi) 
+                headingDirection = -90-angle
+                if rover.heading > -90-initialAngle:
+                    while rover.heading > headingDirection:
+                        left_side_speed = 1
+                        right_side_speed = -1
+                        rover.send_command(left_side_speed, right_side_speed)
+                else:
+                    while rover.heading < headingDirection:
+                        left_side_speed = -1
+                        right_side_speed = 1
+                        rover.send_command(left_side_speed, right_side_speed)
+
+
+
+            if thirdQuad:
+                angle = math.atan2(abs(dy),abs(dx)) *(180 / math.pi) 
+                headingDirection = angle+90
+                if rover.heading < initialAngle+90:
+                    while rover.heading < headingDirection:
+                        left_side_speed = -1
+                        right_side_speed = 1
+                        rover.send_command(left_side_speed, right_side_speed)
+                else:
+                    while rover.heading > headingDirection:
+                        left_side_speed = 1
+                        right_side_speed = -1
+                        rover.send_command(left_side_speed, right_side_speed)
+
+
+            if secondQuad:
+                angle = math.atan2(abs(dy),abs(dx)) *(180 / math.pi) 
+                headingDirection = 90-angle
+                if rover.heading < 90-initialAngle:
+                    while rover.heading < headingDirection:
+                        left_side_speed = -1
+                        right_side_speed = 1
+                        rover.send_command(left_side_speed, right_side_speed)
+                else:
+                    while rover.heading > headingDirection:
+                        left_side_speed = 1
+                        right_side_speed = -1
+                        rover.send_command(left_side_speed, right_side_speed)
             
-            
-            left_side_speed = 1
-            right_side_speed = 1
+            left_side_speed = 5
+            right_side_speed = 5
             rover.send_command(left_side_speed,right_side_speed)
 
 
             for dist in rover.laser_distances:
                 if dist < 5:
                     print("TOO CLOSE")
-                    isTooClose = True
-                    if rover.heading > -17:
-                        left_side_speed = 1
-                        right_side_speed = 0.5
-                        print("HEADING LESS THAN 17")
-                    else:
-                        left_side_speed = 1
-                        right_side_speed = 1
-                        print("GO STRAIGHT AGAIN")
+                    left_side_speed = 0
+                    right_side_speed = 0
                     break
             # the below line sends a command to the rover (simulation) 
             rover.send_command(left_side_speed, right_side_speed)
