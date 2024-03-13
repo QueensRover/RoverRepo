@@ -120,7 +120,7 @@ def main():
             # the below line sends a command to the rover (simulation) 
             rover.send_command(left_side_speed, right_side_speed)
             i = i + 1
-            sleep(0.5)
+            sleep(0.01)
 
     except KeyboardInterrupt:
         pass
